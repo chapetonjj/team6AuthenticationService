@@ -1,5 +1,7 @@
 package com.bah.msd.mcc.domain;
 
+import org.json.JSONObject;
+
 public class CustomerFactory {
 
 public static Customer getCustomer(String json_string){
