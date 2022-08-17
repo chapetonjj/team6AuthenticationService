@@ -33,7 +33,7 @@ public class JWTHelper{
 		}
 
 		
-		public boolean verifyToken(String token) {
+		public static boolean verifyToken(String token) {
 
 			try {
 			    Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -48,7 +48,7 @@ public class JWTHelper{
 			
 		}
 
-		public Map<String, Claim> getClaims(String token) {
+		public static Map<String, Claim> getClaims(String token) {
 			try {
 			    Algorithm algorithm = Algorithm.HMAC256("secret");
 			    JWTVerifier verifier = JWT.require(algorithm)
@@ -62,7 +62,7 @@ public class JWTHelper{
 		}
 		
 		
-		public String getScopes(String token) {
+		public static String getScopes(String token) {
 			try {
 			    Algorithm algorithm = Algorithm.HMAC256("secret");
 			    JWTVerifier verifier = JWT.require(algorithm)
