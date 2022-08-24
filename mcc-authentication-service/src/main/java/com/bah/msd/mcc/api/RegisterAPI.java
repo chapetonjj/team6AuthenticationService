@@ -24,6 +24,8 @@ import com.bah.msd.mcc.domain.Token;
 @RestController
 @RequestMapping("/register")
 public class RegisterAPI {
+	
+	String dataApiHost = "localhost:8080";
 
 	@PostMapping
 	public ResponseEntity<?> registerCustomer(@RequestBody Customer newCustomer, UriComponentsBuilder uri) {
@@ -47,8 +49,14 @@ public class RegisterAPI {
 
 	private void postNewCustomerToCustomerAPI(String json_string) {
 		try {
-
-			URL url = new URL("http://localhost:8080/api/customers");
+			String apiHost= System.getenv("API_HOST");
+			if(apiHost == null) {
+				apiHost = this.dataApiHost;
+			}
+			URL url = new URL("http://" + apiHost + "/api/customers");
+			//URL url = new URL("http://localhost:8080/api/customers") 
+			
+			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");

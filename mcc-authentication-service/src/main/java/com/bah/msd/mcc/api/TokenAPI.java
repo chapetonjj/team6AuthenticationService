@@ -21,6 +21,9 @@ import com.bah.msd.mcc.domain.CustomerFactory;
 @RestController
 @RequestMapping("/token")
 public class TokenAPI {
+	
+	String dataApiHost = "localhost:8080";
+	
 	//JWTUtil jwtUtil = new JWTMockUtil();
 	//JWTUtil jwtUtil = new JWTHelper();
 	public static Token appUserToken;
@@ -75,8 +78,15 @@ public class TokenAPI {
 	
 	private Customer getCustomerByNameFromCustomerAPI(String username) {
 		try {
-
-			URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
+			String apiHost= System.getenv("API_HOST");
+			if(apiHost == null) {
+				apiHost = this.dataApiHost;
+			}
+			URL url = new URL("http://" + apiHost + "/api/customers/byname/" + username);
+			
+			//URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
+			
+			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
