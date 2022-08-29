@@ -1,21 +1,34 @@
 node {
-    stage ("Checkout DataService"){
-        git branch: 'main', url: 'https://github.com/chapetonjj/day3TeamRepository'
+    stage ("Checkout AuthService"){
+        git branch: 'main', url: 'https://github.com/chapetonjj/team6AuthenticationService'
     }
     
-    stage ("Gradle Build - DataService") {
+    stage ("Gradle Build - AuthService") {
     	dir('mcc-authentication-service') {
         	sh 'gradle clean build'
         }
     }
     
-    stage ("Gradle Bootjar-Package - DataService") {
+    stage ("Gradle Bootjar-Package - AuthService") {
         dir('mcc-authentication-service') {
         	sh 'gradle bootjar'
         }
     }
     
-    stage('User Acceptance Test - DataService') {
+    stage ("Containerize the app-docker build - AuthService") {
+        sh 'docker build --rm -t event-auth:v1.0 .'
+    }
+    
+    stage ("Inspect the docker image - AuthService"){
+        sh "docker images event-auth:v1.0"
+        sh "docker inspect event-auth:v1.0"
+    }
+    
+    stage ("Run Docker container instance - AuthService"){
+        sh "docker run -d --rm --name event-auth -p 8081:8081 event-auth:v1.0"
+     }
+    
+    stage('User Acceptance Test - AuthService') {
 	
 	  def response= input message: 'Is this build good to go?',
 	   parameters: [choice(choices: 'Yes\nNo', 
@@ -29,5 +42,11 @@ node {
 		    }
 	    }
 	  }
+    }
+    
+    stage("Production Deployment View"){
+        sh "kubectl get deployments"
+        sh "kubectl get pods"
+        sh "kubectl get services"
     }
 }
